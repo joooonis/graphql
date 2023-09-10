@@ -1,5 +1,18 @@
 import { ApolloServer, gql } from 'apollo-server';
 
+const tweets = [
+  {
+    id: '1',
+    text: 'Hello World',
+    userId: '1',
+  },
+  {
+    id: '2',
+    text: 'Bye World',
+    userId: '2',
+  },
+];
+
 const typeDefs = gql`
   type Tweet {
     id: ID!
@@ -18,6 +31,11 @@ const typeDefs = gql`
   type Query {
     AllTweets: [Tweet!]!
     Tweet(id: ID!): Tweet
+  }
+
+  type Mutation {
+    createTweet(text: String!, userId: ID!): Tweet
+    deleteTweet(id: ID!): Boolean
   }
 `;
 
