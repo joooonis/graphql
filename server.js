@@ -42,13 +42,13 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     AllTweets: () => tweets,
-    Tweet: (parent, args) => {
+    Tweet: (_, args) => {
       const { id } = args;
       return tweets.find((tweet) => tweet.id === id);
     },
   },
   Mutation: {
-    createTweet: (parent, args) => {
+    createTweet: (_, args) => {
       const { text, userId } = args;
       const newTweet = {
         id: tweets.length + 1,
@@ -58,11 +58,13 @@ const resolvers = {
       tweets.push(newTweet);
       return newTweet;
     },
-    deleteTweet: (parent, args) => {
+    deleteTweet: (_, args) => {
       const { id } = args;
-      const tweetIndex = tweets.findIndex((tweet) => tweet.id === id);
-      if (tweetIndex === -1) return false;
-      tweets.splice(tweetIndex, 1);
+      const twwet = tweets.find((tweet) => tweet.id === id);
+      if (!twwet) {
+        return false;
+      }
+      tweets = tweets.filter((tweet) => tweet.id !== id);
       return true;
     },
   },
