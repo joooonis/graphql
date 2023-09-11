@@ -48,10 +48,36 @@ const typeDefs = gql`
     fullname: String
   }
 
+  type Movie {
+    id: Int!
+    url: String!
+    imdb_code: String!
+    title: String!
+    title_english: String!
+    title_long: String!
+    slug: String!
+    year: Int!
+    rating: Float!
+    runtime: Float!
+    genres: [String]!
+    summary: String
+    description_full: String!
+    synopsis: String
+    yt_trailer_code: String!
+    language: String!
+    background_image: String!
+    background_image_original: String!
+    small_cover_image: String!
+    medium_cover_image: String!
+    large_cover_image: String!
+  }
+
   type Query {
     AllTweets: [Tweet!]!
     Tweet(id: ID!): Tweet
     AllUsers: [User!]!
+    AllMovies: [Movie!]!
+    Movie(id: String!): Movie
   }
 
   type Mutation {
@@ -68,6 +94,23 @@ const resolvers = {
       return tweets.find((tweet) => tweet.id === id);
     },
     AllUsers: () => users,
+
+    AllMovies: async () => {
+      const response = await fetch(
+        'https://yts.mx/api/v2/list_movies.json?limit=50'
+      );
+      const { data } = await response.json();
+      return data.movies;
+    },
+
+    Movie: async (_, args) => {
+      const { id } = args;
+      const response = await fetch(
+        `https://yts.mx/api/v2/movie_details.json?movie_id=${id}`
+      );
+      const { data } = await response.json();
+      return data.movie;
+    },
   },
 
   Mutation: {
