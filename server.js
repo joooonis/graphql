@@ -29,6 +29,9 @@ const users = [
 ];
 
 const typeDefs = gql`
+  """
+  A Tweet with text and author
+  """
   type Tweet {
     id: ID!
     text: String!
@@ -39,6 +42,9 @@ const typeDefs = gql`
     id: ID!
     firstName: String!
     lastName: String!
+    """
+    The full name of the user
+    """
     fullname: String
   }
 
