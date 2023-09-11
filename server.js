@@ -13,6 +13,21 @@ const tweets = [
   },
 ];
 
+const users = [
+  {
+    id: '1',
+    username: 'John',
+    firstName: 'John',
+    lastName: 'Doe',
+  },
+  {
+    id: '2',
+    username: 'Jane',
+    firstName: 'Jane',
+    lastName: 'Lee',
+  },
+];
+
 const typeDefs = gql`
   type Tweet {
     id: ID!
@@ -22,15 +37,15 @@ const typeDefs = gql`
 
   type User {
     id: ID!
-    username: String!
     firstName: String!
     lastName: String!
-    tweets: [Tweet]
+    fullname: String
   }
 
   type Query {
     AllTweets: [Tweet!]!
     Tweet(id: ID!): Tweet
+    AllUsers: [User!]!
   }
 
   type Mutation {
@@ -46,7 +61,9 @@ const resolvers = {
       const { id } = args;
       return tweets.find((tweet) => tweet.id === id);
     },
+    AllUsers: () => users,
   },
+
   Mutation: {
     createTweet: (_, args) => {
       const { text, userId } = args;
@@ -60,12 +77,18 @@ const resolvers = {
     },
     deleteTweet: (_, args) => {
       const { id } = args;
-      const twwet = tweets.find((tweet) => tweet.id === id);
-      if (!twwet) {
+      const tweet = tweets.find((tweet) => tweet.id === id);
+      if (!tweet) {
         return false;
       }
       tweets = tweets.filter((tweet) => tweet.id !== id);
       return true;
+    },
+  },
+
+  User: {
+    fullname: (parent) => {
+      return `${parent.firstName} ${parent.lastName}`;
     },
   },
 };
