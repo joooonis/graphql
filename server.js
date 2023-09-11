@@ -32,7 +32,7 @@ const typeDefs = gql`
   type Tweet {
     id: ID!
     text: String!
-    userId: ID!
+    author: User
   }
 
   type User {
@@ -86,9 +86,15 @@ const resolvers = {
     },
   },
 
+  Tweet: {
+    author: ({ userId }) => {
+      return users.find((user) => user.id === userId);
+    },
+  },
+
   User: {
-    fullname: (parent) => {
-      return `${parent.firstName} ${parent.lastName}`;
+    fullname: ({ firstName, lastName }) => {
+      return `${firstName} ${lastName}`;
     },
   },
 };
